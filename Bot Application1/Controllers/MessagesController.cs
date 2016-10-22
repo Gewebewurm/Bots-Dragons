@@ -19,20 +19,31 @@ namespace Bot_Application1
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            if (activity.Type == ActivityTypes.Message)
-            {
-                ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                // calculate something for us to return
-                int length = (activity.Text ?? string.Empty).Length;
+            //TODO: Remove unused code after it has served as example for other functions
+            //if (activity.Type == ActivityTypes.Message)
+            //{
+            //    ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+            //    // calculate something for us to return
+            //    int length = (activity.Text ?? string.Empty).Length;
 
-                // return our reply to the user
-                Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
+            //    // return our reply to the user
+            //    Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
+            //    await connector.Conversations.ReplyToActivityAsync(reply);
+            //}
+            //else
+            //{
+            //    HandleSystemMessage(activity);
+            //}
+            ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+
+            //Dice roll functionality
+            int diceRollResult = rollDice(activity.Text);
+            if(diceRollResult != -1)
+            {
+                Activity reply = activity.CreateReply($"Your dice throw with a {activity.Text} resulted in a {diceRollResult}");
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
-            else
-            {
-                HandleSystemMessage(activity);
-            }
+            
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
         }
@@ -64,6 +75,41 @@ namespace Bot_Application1
             }
 
             return null;
+        }
+
+        private int rollDice(string text)
+        {
+            string bla = text;
+            
+            switch (bla)
+            {
+                case "D4":
+                    return rollDice(4);
+                    break;
+                case "D6":
+                    return rollDice(6);
+                    break;
+                case "D8":
+                    return rollDice(8);
+                    break;
+                case "D10":
+                    return rollDice(10);
+                    break;
+                case "D12":
+                    return rollDice(12);
+                    break;
+                case "D20":
+                    return rollDice(20);
+                    break;
+                default:
+                    return -1;
+            }
+        }
+
+        private int rollDice(int numberOfSides)
+        {
+            Random random = new Random();
+            return random.Next(1, numberOfSides);
         }
     }
 }
