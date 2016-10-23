@@ -30,8 +30,8 @@ namespace Bot_Application1
                 responseText = ($"Your dice throw with a {activity.Text} resulted in a {diceRollResult}");
             } else if (activity.Type == ActivityTypes.ConversationUpdate)
             {
-                HandleSystemMessage(activity);
-                await connector.Conversations.ReplyToActivityAsync(activity);
+                Activity greeting = HandleSystemMessage(activity);
+                responseText = greeting.Text;
             } else
             {
                 responseText = ("I didn't quite understand you. Would you kindly repeat yourself?");
