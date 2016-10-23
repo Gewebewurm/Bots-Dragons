@@ -132,6 +132,7 @@ namespace Bot_Application1
         private int rollDice(int numberOfSides)
         {
             Random random = new Random();
+            numberOfSides++;
             return random.Next(1, numberOfSides);
         }
 
