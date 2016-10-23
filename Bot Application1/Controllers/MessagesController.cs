@@ -28,11 +28,13 @@ namespace Bot_Application1
             if(diceRollResult != -1)
             {
                 responseText = ($"Your dice throw with a {activity.Text} resulted in a {diceRollResult}");
-            } else if (activity.Type == ActivityTypes.ConversationUpdate)
+            }
+            else if (activity.Type == ActivityTypes.ConversationUpdate)
             {
                 Activity greeting = HandleSystemMessage(activity);
                 responseText = greeting.Text;
-            } else
+            }
+            else
             {
                 responseText = ("I didn't quite understand you. Would you kindly repeat yourself?");
             }
@@ -56,20 +58,13 @@ namespace Bot_Application1
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
                 string response;
-                bool botWasAdded = false;
-                //Test if the bot itself was added to the conversation
-                for (int i = 0; i < message.MembersAdded.Count; i++)
-                {
-                    if (message.MembersAdded[i].Id == message.Recipient.Id)
-                    {
-                        botWasAdded = true;
-                    }
-                }
+                bool botAddedToConversation = botWasAdded(message);
+
                 //Different messages, depending on who was added or if someone left.
-                if (message.MembersAdded.Count > 0 && botWasAdded == false)
+                if (message.MembersAdded.Count > 0 && botAddedToConversation == false)
                 {
                     response = "The party meets a hobo on the side of the street. Magnanimous as they are, they let him join their group. The party has a new member!";
-                } else if (message.MembersAdded.Count > 0 && botWasAdded == true)
+                } else if (message.MembersAdded.Count > 0 && botAddedToConversation == true)
                 {
                     response = sendGreetings();
                 } else
@@ -103,27 +98,21 @@ namespace Bot_Application1
                 case "D4":
                 case "d4":
                     return rollDice(4);
-                    break;
                 case "D6":
                 case "d6":
                     return rollDice(6);
-                    break;
                 case "D8":
                 case "d8":
                     return rollDice(8);
-                    break;
                 case "D10":
                 case "d10":
                     return rollDice(10);
-                    break;
                 case "D12":
                 case "d12":
                     return rollDice(12);
-                    break;
                 case "D20":
                 case "d20":
                     return rollDice(20);
-                    break;
                 default:
                     return -1;
             }
@@ -141,6 +130,18 @@ namespace Bot_Application1
         {
             String greetings = "Greetings to you, adventurers. I will be your Game Master today. If you want me to roll a dice for you, simpley tell me which one. I have a 'D4', a 'D6', a 'D8', a 'D10', a 'D12' and a 'D20'.";
             return greetings;
+        }
+
+        private bool botWasAdded(Activity activity)
+        {
+            for (int i = 0; i < activity.MembersAdded.Count; i++)
+            {
+                if (activity.MembersAdded[i].Id == activity.Recipient.Id)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
