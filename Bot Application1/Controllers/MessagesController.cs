@@ -19,34 +19,10 @@ namespace Bot_Application1
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            //TODO: Remove unused code after it has served as example for other functions
-            //if (activity.Type == ActivityTypes.Message)
-            //{
-            //    ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-            //    // calculate something for us to return
-            //    int length = (activity.Text ?? string.Empty).Length;
-
-            //    // return our reply to the user
-            //    Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
-            //    await connector.Conversations.ReplyToActivityAsync(reply);
-            //}
-            //else
-            //{
-            //    HandleSystemMessage(activity);
-            //}
             string responseText = "";
             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
             StateClient stateClient = activity.GetStateClient();
-
-            //BotData conversationData = await stateClient.BotState.GetConversationDataAsync(activity.ChannelId, activity.From.Id);
-
-            //if (activity.Type == "UserAddedToConversation")
-            //{
-            //    responseText = sendGreetings();
-            //    conversationData.SetProperty<bool>("SentGreeting", true);
-            //    await stateClient.BotState.SetConversationDataAsync(activity.ChannelId, activity.From.Id, conversationData);
-
-            //}
+            
             //Dice roll functionality
             int diceRollResult = rollDice(activity.Text);
             if(diceRollResult != -1)
